@@ -3,6 +3,7 @@
 # Same as 01-simple.py but with pretty printing a result set using
 # "tabulate". That library can print in various formats, such as Markdown, HTML, etc.
 
+# see https://pyneng.readthedocs.io/en/latest/book/12_useful_modules/tabulate.html#
 
 from faker import Faker
 
