@@ -1,7 +1,7 @@
 # Standalone example
 
-# Same as 01-simple.py but with more complex select statements.
-# Features shown include like clause, func.row_number
+# Same as 01-simple.py but with pretty printing a result set using
+# "tabulate". That library can print in various formats, such as Markdown, HTML, etc.
 
 
 from faker import Faker
@@ -9,6 +9,8 @@ from faker import Faker
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy import Table, Column, Integer, String
 from sqlalchemy import select, func, desc
+
+from tabulate import tabulate
 
 fake = Faker()
 Faker.seed(0)  # make sure to also create the same data
@@ -49,46 +51,22 @@ def batch_insert_many_rows(num):
         conn.commit()
 
 
-def enumerate_names(like_cond):
-    """
-    Enumerate all names that fullfill the condition.
-    """
-
+def print_all_data(format):
     with db.connect() as conn:
-        last_name_starts_with_a_cond = person_table.c.last.like(like_cond)
-
-        sel_stmt = (
-            select(
-                func.row_number().over(order_by=["last", "first"]),
-                person_table.c.last,
-                person_table.c.first,
-            )
-            .where(last_name_starts_with_a_cond)
-            .order_by("last", "first")
-        )
-
-        for row in conn.execute(sel_stmt).all():
-            print(row)
-
-
-def count_names_by_starting_letters():
-    substr_stmt = func.substr(person_table.c.last, 0, 3).label("starting_letter")
-    sel_stmt = select(substr_stmt, func.count().label("count")).group_by(substr_stmt)
-
-    with db.connect() as conn:
-        for row in conn.execute(sel_stmt).all():
-            print(row)
+        sel_stmt = person_table.select().order_by("last", "first").limit(10)
+        result = conn.execute(sel_stmt).all()
+        if result:
+            headers = result[0]._asdict().keys()
+            data = [row for row in result]
+            print(tabulate(data, headers=headers, tablefmt=format))
 
 
 def run():
     create_db()
     batch_insert_many_rows(1000)
 
-    # print all names that start with "ag".
-    enumerate_names("ag%")
-
-    # print the count
-    count_names_by_starting_letters()
+    # also try pipe (for markdown) or html
+    print_all_data("grid")
 
 
 if __name__ == "__main__":
