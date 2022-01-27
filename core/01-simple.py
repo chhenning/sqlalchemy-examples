@@ -6,7 +6,7 @@ from faker import Faker
 
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy import Table, Column, Integer, String
-from sqlalchemy import select, func
+from sqlalchemy import select, func, desc
 
 fake = Faker()
 Faker.seed(0)  # make sure to also create the same data
@@ -55,9 +55,8 @@ def batch_insert_many_rows():
 
 def print_all_data():
     with db.connect() as conn:
-        sel_stmt = person_table.select().order_by(
-            person_table.c.last, person_table.c.first
-        )
+        sel_stmt = person_table.select().order_by("last", "first")
+
         for row in conn.execute(sel_stmt).all():
             print(row)
 
