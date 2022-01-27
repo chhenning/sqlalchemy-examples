@@ -1,7 +1,8 @@
 # Standalone example
 
-# Create an in-memory database with one table (person) and fill it up with some names.
-# Do some simple select queries.
+# Same as 01-simple.py but with more complex select statements.
+# Features shown include like clause, func.row_number
+
 
 from faker import Faker
 
@@ -35,21 +36,12 @@ def create_db():
     meta.create_all(db)
 
 
-def insert_one_row():
-    with db.connect() as conn:
-        ins_stmt = person_table.insert().values(
-            first=fake.first_name(), last=fake.last_name()
-        )
-        conn.execute(ins_stmt)
-        conn.commit()
-
-
-def batch_insert_many_rows():
+def batch_insert_many_rows(num):
     """
     Batch insert some data into person table.
     """
     # create a list of dicts
-    names = [dict(first=fake.first_name(), last=fake.last_name()) for _ in range(10)]
+    names = [dict(first=fake.first_name(), last=fake.last_name()) for _ in range(num)]
 
     with db.connect() as conn:
         ins_stmt = person_table.insert()
@@ -57,31 +49,34 @@ def batch_insert_many_rows():
         conn.commit()
 
 
-def print_all_data():
+def enumerate_names(like_cond):
+    """
+    Enumerate all names that fullfill the condition.
+    """
+
     with db.connect() as conn:
-        sel_stmt = person_table.select().order_by("last", "first")
+        last_name_starts_with_a_cond = person_table.c.last.like(like_cond)
+
+        sel_stmt = (
+            select(
+                func.row_number().over(order_by=["last", "first"]),
+                person_table.c.last,
+                person_table.c.first,
+            )
+            .where(last_name_starts_with_a_cond)
+            .order_by("last", "first")
+        )
 
         for row in conn.execute(sel_stmt).all():
             print(row)
 
 
-def count_num_rows():
-    """
-    Print number of rows.
-
-    Note that the standalone `select` is being used.
-    """
-    with db.connect() as conn:
-        count_stmt = select(func.count()).select_from(person_table)
-        print("num rows:", conn.execute(count_stmt).scalar())
-
-
 def run():
     create_db()
-    insert_one_row()
-    batch_insert_many_rows()
-    print_all_data()
-    count_num_rows()
+    batch_insert_many_rows(1000)
+
+    # print all names that start with "ag".
+    enumerate_names("ag%")
 
 
 if __name__ == "__main__":
