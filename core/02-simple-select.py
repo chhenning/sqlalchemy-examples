@@ -53,13 +53,17 @@ def enumerate_names(like_cond):
     """
     Enumerate all names that fullfill the condition.
     """
+    # a label like "ron_num" can be used like a field when dealing with a row object.
+    row_number_stmt = (
+        func.row_number().over(order_by=["last", "first"]).label("row_num")
+    )
+    last_name_starts_with_a_cond = person_table.c.last.like(like_cond)
 
     with db.connect() as conn:
-        last_name_starts_with_a_cond = person_table.c.last.like(like_cond)
 
         sel_stmt = (
             select(
-                func.row_number().over(order_by=["last", "first"]),
+                row_number_stmt,
                 person_table.c.last,
                 person_table.c.first,
             )
@@ -68,15 +72,20 @@ def enumerate_names(like_cond):
         )
 
         for row in conn.execute(sel_stmt).all():
-            print(row)
+            print(row.row_num, row.last, row.first)
 
 
 def count_names_by_starting_letters():
-    substr_stmt = func.substr(person_table.c.last, 0, 3).label("starting_letter")
+    """
+    Count the names by its first two letters.
+
+    In SQLAlchemy a condition can be its own object, like substr_stmt.
+    """
+    substr_stmt = func.substr(person_table.c.last, 0, 3).label("starting_letters")
     sel_stmt = select(substr_stmt, func.count().label("count")).group_by(substr_stmt)
 
     with db.connect() as conn:
-        for row in conn.execute(sel_stmt).all():
+        for row in conn.execute(sel_stmt.limit(10)).all():
             print(row)
 
 

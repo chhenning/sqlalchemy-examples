@@ -16,6 +16,8 @@ All code is formatted with `black`.
 
 [SQLModel](https://github.com/tiangolo/sqlmodel)
 
+[SQLAlchemy Utils](https://github.com/kvesteri/sqlalchemy-utils)
+
 [tabulate](https://pypi.org/project/tabulate/)
 
 [Awesome SQLAlchemy](https://github.com/dahlia/awesome-sqlalchemy)

@@ -9,7 +9,6 @@ from faker import Faker
 
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy import Table, Column, Integer, String
-from sqlalchemy import select, func, desc
 
 from tabulate import tabulate
 
@@ -53,8 +52,16 @@ def batch_insert_many_rows(num):
 
 
 def print_all_data(format):
+    """
+    Sort the names and print out the first 10 names using the tabulate package.
+
+    Note, that a row object comes with "_asdict()" function which can be used to retrieve
+    the column names.
+    """
+    sel_stmt = person_table.select().order_by("last", "first").limit(10)
+
     with db.connect() as conn:
-        sel_stmt = person_table.select().order_by("last", "first").limit(10)
+
         result = conn.execute(sel_stmt).all()
         if result:
             headers = result[0]._asdict().keys()
@@ -66,7 +73,7 @@ def run():
     create_db()
     batch_insert_many_rows(1000)
 
-    # also try pipe (for markdown) or html
+    # also try "pipe" (for markdown) or "html"
     print_all_data("grid")
 
 
