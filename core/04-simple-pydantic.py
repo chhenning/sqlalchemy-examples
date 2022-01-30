@@ -66,7 +66,7 @@ def _create_pydantic_model(sqlal_obj):
     types = {"VARCHAR": Optional[str], "INTEGER": int}
 
     d = {str(col.name): (types[str(col.type)], ...) for col in sqlal_obj.columns}
-    return create_model("lala", **d, __config__=Config)
+    return create_model(str(sqlal_obj.name), **d, __config__=Config)
 
 
 def print_data_as_json():

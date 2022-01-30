@@ -58,7 +58,7 @@ def run():
 
     with db.connect() as conn:
 
-        # retrieve top level "first_name"
+        # retrieve top level "first_name    "
         for row in conn.execute(select(person_tbl.c.data["first_name"])):
             print(row)
 
