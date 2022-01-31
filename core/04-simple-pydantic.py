@@ -65,6 +65,7 @@ def _create_pydantic_model(sqlal_obj):
     # M.from_orm(row) might throw an exception.
     types = {"VARCHAR": Optional[str], "INTEGER": int}
 
+    # it really is important to explicitly convert all SQLAlchemy "strings", like col.name.
     d = {str(col.name): (types[str(col.type)], ...) for col in sqlal_obj.columns}
     return create_model(str(sqlal_obj.name), **d, __config__=Config)
 
