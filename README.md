@@ -10,6 +10,8 @@ All code is formatted with `black`.
 
 [SQLAlchemy Examples](https://github.com/sqlalchemy/sqlalchemy/tree/main/examples)
 
+[SQLAlchemy's Wiki](https://github.com/sqlalchemy/sqlalchemy/wiki)
+
 [pygotham 2019](https://github.com/f0rk/pygotham-2019/tree/master/code/pygotham_2019)
 
 # Other tools with using SQLAlchemy
