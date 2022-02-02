@@ -119,7 +119,7 @@ def delete_data():
         conn.execute(stmt)
         conn.commit()
 
-    # verify
+    # verify that data is gone
     with db.connect() as conn:
         stmt = select(func.count(artist.c.id)).where(artist.c.id == artist_id)
         assert conn.execute(stmt).scalar() == 0

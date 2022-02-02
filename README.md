@@ -21,3 +21,15 @@ All code is formatted with `black`.
 [tabulate](https://pypi.org/project/tabulate/)
 
 [Awesome SQLAlchemy](https://github.com/dahlia/awesome-sqlalchemy)
+
+# SQLAlchemy Notes
+
+## Result
+
+Cursor results:
+
+- lastrowid -- Get the latest ID from the last row inserted.
+
+- rowcount -- How many rows have been affected by a statement, like `UPDATE` or `DELETE`.
+
+- scalar() -- Fetch the first column of the first row, and close the result set.
