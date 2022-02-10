@@ -35,3 +35,25 @@ Cursor results:
 - rowcount -- How many rows have been affected by a statement, like `UPDATE` or `DELETE`.
 
 - scalar() -- Fetch the first column of the first row, and close the result set.
+
+## row_number()
+
+One Example
+
+```py
+from sqlalchemy import select, func
+
+row_number_stmt = (
+    func.row_number().over(order_by=["last", "first"]).label("row_num")
+)
+```
+
+For descending do:
+
+```py
+from sqlalchemy import select, func, desc
+
+row_number_stmt = (
+    func.row_number().over(order_by=desc(["last", "first"])).label("row_num")
+)
+```

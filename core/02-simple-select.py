@@ -57,6 +57,7 @@ def enumerate_names(like_cond):
     row_number_stmt = (
         func.row_number().over(order_by=["last", "first"]).label("row_num")
     )
+
     last_name_starts_with_a_cond = person_table.c.last.like(like_cond)
 
     with db.connect() as conn:
