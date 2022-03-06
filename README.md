@@ -14,6 +14,8 @@ All code is formatted with `black`.
 
 [pygotham 2019](https://github.com/f0rk/pygotham-2019/tree/master/code/pygotham_2019)
 
+[Advanced SQLAlchemy Features You Need To Start Using](https://martinheinz.dev/blog/28)
+
 # Other tools with using SQLAlchemy
 
 [SQLModel](https://github.com/tiangolo/sqlmodel)
