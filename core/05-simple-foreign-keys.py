@@ -13,7 +13,7 @@ from faker import Faker
 
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy import Table, Column, Integer, String, ForeignKey
-from sqlalchemy import select, func, insert
+from sqlalchemy import select, func, insert, delete
 
 fake = Faker()
 Faker.seed(0)  # make sure to also create the same data
@@ -181,6 +181,14 @@ def count_all():
             print(row)
 
 
+def delete_one_person():
+    with db.connect() as conn:
+        delete(person_tbl).where
+        # db.execute()
+
+        # conn.commit()
+
+
 def run():
     create_db()
     insert_one_person()
@@ -188,6 +196,8 @@ def run():
 
     print_all()
     count_all()
+
+    delete_one_person()
 
 
 if __name__ == "__main__":

@@ -1,3 +1,5 @@
 {
-  "python.pythonPath": "/Users/chhenning/.pyenv/versions/3.10.0/envs/cooper/bin/python"
+  "python.pythonPath": "/Users/chhenning/.pyenv/versions/3.10.0/envs/cooper/bin/python",
+  "python.analysis.autoImportCompletions": false,
+
 }

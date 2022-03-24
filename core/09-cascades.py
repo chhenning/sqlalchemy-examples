@@ -4,26 +4,28 @@
 
 from faker import Faker
 
-from sqlalchemy import create_engine, MetaData, event
+from sqlalchemy import create_engine, MetaData
 from sqlalchemy import Table, Column, Integer, String, ForeignKey
 from sqlalchemy import select, update, func, delete
 
+from sqlalchemy import event
 from sqlalchemy.engine import Engine
+from sqlite3 import Connection as SQLite3Connection
 
+db = create_engine("sqlite://", echo=True, future=True)
 
 # to make foreign keys work we need to instruct sqlite to do so.
 @event.listens_for(Engine, "connect")
-def set_sqlite_pragma(dbapi_connection, connection_record):
-    cursor = dbapi_connection.cursor()
-    cursor.execute("PRAGMA foreign_keys=ON")
-    cursor.close()
+def _set_sqlite_pragma(dbapi_connection, connection_record):
+    if isinstance(dbapi_connection, SQLite3Connection):
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA foreign_keys=ON;")
+        cursor.close()
 
 
 fake = Faker()
 Faker.seed(0)  # make sure to also create the same data
 
-
-db = create_engine("sqlite://", echo=False, future=True)
 
 meta = MetaData()
 

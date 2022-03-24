@@ -1,4 +1,3 @@
-from curses import echo
 from sqlalchemy import Column, Integer, String
 from sqlalchemy import create_engine
 from sqlalchemy import select
