@@ -1,3 +1,5 @@
+# Testing when there is a Foreign Key constraint violation
+
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy import create_engine, select, delete, func
 from sqlalchemy.orm import relationship, sessionmaker
