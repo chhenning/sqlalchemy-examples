@@ -1,4 +1,3 @@
-from curses import echo
 from sqlalchemy import Column, Integer, String
 from sqlalchemy import create_engine
 from sqlalchemy import select
@@ -43,12 +42,12 @@ with Session.begin() as session:
 
 
 with Session.begin() as session:
-    if session.execute(select(User.id).where(User.first == "Benjamin")).first():
+    if session.execute(select(User.id).where(User.first == "Benjamin")).scalar():
         print("Benjamin exists")
     else:
         print("Benjamin doesn't exists")
 
-    if session.execute(select(User.id).where(User.first == "Katrin")).first():
+    if session.execute(select(User.id).where(User.first == "Katrin")).scalar():
         print("Katrin exists")
     else:
         print("Katrin doesn't exists")

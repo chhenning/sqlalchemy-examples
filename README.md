@@ -16,6 +16,9 @@ All code is formatted with `black`.
 
 [Advanced SQLAlchemy Features You Need To Start Using](https://martinheinz.dev/blog/28)
 
+Beware, some information seem outdated!
+[pysheet](https://www.pythonsheets.com/notes/python-sqlalchemy.html)
+
 # Other tools with using SQLAlchemy
 
 [SQLModel](https://github.com/tiangolo/sqlmodel)
@@ -38,6 +41,8 @@ Cursor results:
 
 - scalar() -- Fetch the first column of the first row, and close the result set.
 
+- first() -- Fetch the first result or None
+
 ## row_number()
 
 One Example
@@ -59,3 +64,24 @@ row_number_stmt = (
     func.row_number().over(order_by=desc(["last", "first"])).label("row_num")
 )
 ```
+
+# Errors
+
+## NotImplementedError: This method is not implemented for SQLAlchemy 2.0.
+
+Don't use an `engine` when executing a query. Use a `connection`.
+
+```py
+db = create_engine("sqlite://", echo=False, future=True)
+
+# error
+db.execute(select(some_table)).all()
+
+# better
+conn = db.connect()
+conn.execute(select(some_table)).all()
+```
+
+## sqlalchemy.exc.NoSuchModuleError: Can't load plugin: sqlalchemy.dialects:None
+
+Forgot to specify the db dialect when setting up the connection string.

@@ -73,7 +73,7 @@ def count_num_rows():
     """
     with db.connect() as conn:
         count_stmt = select(func.count()).select_from(person_table)
-        print("num rows:", conn.execute(count_stmt).scalar())
+        print("num rows:", conn.scalar(count_stmt))
 
 
 def run():
