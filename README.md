@@ -33,6 +33,15 @@ Beware, some information seem outdated!
 
 ## Result
 
+https://docs.sqlalchemy.org/en/14/core/connections.html#sqlalchemy.engine.Row._fields
+
+https://docs.sqlalchemy.org/en/14/core/connections.html#sqlalchemy.engine.Result
+
+```py
+row._mapping
+row._fields
+```
+
 Cursor results:
 
 - lastrowid -- Get the latest ID from the last row inserted.
@@ -65,6 +74,20 @@ row_number_stmt = (
 )
 ```
 
+# Check of ssl is in use
+
+```py
+from sqlalchemy import create_engine
+db_string = "postgresql+psycopg2://myuser:******@someserver:5432/somedb"
+db = create_engine(db_string)
+conn = db.connect()
+conn.connection.connection.info.ssl_in_use
+```
+
+# Connection Pool
+
+`print(engine.pool.status())`
+
 # Errors
 
 ## NotImplementedError: This method is not implemented for SQLAlchemy 2.0.
@@ -85,3 +108,14 @@ conn.execute(select(some_table)).all()
 ## sqlalchemy.exc.NoSuchModuleError: Can't load plugin: sqlalchemy.dialects:None
 
 Forgot to specify the db dialect when setting up the connection string.
+
+## TypeError: Session.get_bind() got an unexpected keyword argument
+
+Use a dict when passing parameters.
+
+```py
+db.execute(
+    text("call sp_some_sp(:src, :dst, :dst_desc)"),
+    dict(src="LALA", dst="BAL", dst_desc="Here we are."),
+)
+```

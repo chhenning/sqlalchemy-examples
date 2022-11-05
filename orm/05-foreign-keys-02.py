@@ -101,6 +101,15 @@ def create():
         db.flush()
         db.commit()
 
+        # also try the other way
+        f2 = Feature(name="Feature 2")
+        f2.plan = p
+        f2.tier = t
+        f2.header = h
+
+        db.flush()
+        db.commit()
+
 
 def print_everything():
     with Session() as db:
